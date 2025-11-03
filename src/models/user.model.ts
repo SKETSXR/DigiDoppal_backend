@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
-import { user, userRole, NewUser } from '../db/schema';
+import { db } from '../db/index.js';
+import { user, userRole, NewUser } from '../db/schema.js';
 
 export class UserModel {
 

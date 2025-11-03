@@ -1,7 +1,7 @@
 
 import { FastifyInstance } from 'fastify';
-import { MerakiController } from '../controllers/meraki.controller';
-import { verifyToken, isAdmin } from '../middleware/auth.middleware';
+import { MerakiController } from '../controllers/meraki.controller.js';
+import { verifyToken, isAdmin } from '../middleware/auth.middleware.js';
 
 export async function merakiRoutes(fastify: FastifyInstance) {
   // Manual sync trigger (admin only)

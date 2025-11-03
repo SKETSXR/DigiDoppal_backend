@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import { user, userRole } from './schema';
+import { user, userRole } from './schema.js';
 import { hashPassword } from '../utils/password.util';
 import { UserModel } from '../models/user.model';
-import { config } from '../config/env';
-import * as schema from './schema';
+import { config } from '../config/env.js';
+import * as schema from './schema.js';
 
 const main = async () => {
 

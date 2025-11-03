@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { PredictionService } from '../services/prediction.service';
-import { successResponse, errorResponse } from '../utils/response.util';
-import { NewPrediction } from '../db/schema';
-import { PredictionQuery } from '../types/index';
+import { PredictionService } from '../services/prediction.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
+import { NewPrediction } from '../db/schema.js';
+import { PredictionQuery } from '../types/index.js';
 
 export class PredictionController {
   /**

@@ -1,7 +1,7 @@
 // src/controllers/user.controller.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { UserService } from '../services/user.service';
-import { successResponse, errorResponse } from '../utils/response.util';
+import { UserService } from '../services/user.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
 
 interface CreateUserBody {
   name: string;

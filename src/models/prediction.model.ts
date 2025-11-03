@@ -1,6 +1,6 @@
 import { eq, and, gte, lte, desc, sql } from 'drizzle-orm';
-import { db } from '../db';
-import { prediction, NewPrediction } from '../db/schema';
+import { db } from '../db/index.js';
+import { prediction, NewPrediction } from '../db/schema.js';
 
 export class PredictionModel {
   /**

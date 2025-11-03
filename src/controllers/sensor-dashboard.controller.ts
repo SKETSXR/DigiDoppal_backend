@@ -1,7 +1,7 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { SensorDashboardService } from '../services/sensor-dashboard.service';
-import { successResponse, errorResponse } from '../utils/response.util';
+import { SensorDashboardService } from '../services/sensor-dashboard.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
 
 export class SensorDashboardController {
   /**

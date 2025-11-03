@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { verifyToken, isAdmin } from '../middleware/auth.middleware';
-import { UserController } from '../controllers/user.controller';
+// import { verifyToken, isAdmin } from '../middleware/auth.middleware';
+import { UserController } from '../controllers/user.controller.js';
 
 export async function userRoutes(fastify: FastifyInstance) {
   // Create user (public)

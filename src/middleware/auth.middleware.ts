@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { errorResponse } from '../utils/response.util';
-import { AuthenticatedRequest } from '../types/index';
+import { errorResponse } from '../utils/response.util.js';
+import { AuthenticatedRequest } from '../types/index.js';
 
 /**
  * Verify JWT token middleware

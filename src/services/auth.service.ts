@@ -1,7 +1,7 @@
-import { UserModel } from '../models/user.model';
-import { UserAuthService } from './user-auth.service';
-import { hashPassword, comparePassword } from '../utils/password.util';
-import { CustomError } from '../types/index';
+import { UserModel } from '../models/user.model.js';
+import { UserAuthService } from './user-auth.service.js';
+import { hashPassword, comparePassword } from '../utils/password.util.js';
+import { CustomError } from '../types/index.js';
 
 export class AuthService {
   /**

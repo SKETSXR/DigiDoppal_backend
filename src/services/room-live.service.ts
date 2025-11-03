@@ -1,7 +1,7 @@
 
-import { RoomLiveModel } from '../models/room-live.model';
-import { ActivityLogModel } from '../models/activity-log.model';
-import { ActivityLogInput } from '../types/index';
+import { RoomLiveModel } from '../models/room-live.model.js';
+import { ActivityLogModel } from '../models/activity-log.model.js';
+import { ActivityLogInput } from '../types/index.js';
 
 export class RoomLiveService {
   /**

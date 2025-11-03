@@ -1,8 +1,8 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { ActivityLogService } from '../services/activity-log.service';
-import { successResponse, errorResponse } from '../utils/response.util';
-import { NewActivityLog } from '../db/schema';
-import { ActivityLogFilters } from '../types/index';
+import { ActivityLogService } from '../services/activity-log.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
+import { NewActivityLog } from '../db/schema.js';
+import { ActivityLogFilters } from '../types/index.js';
 
 export class ActivityLogController {
   /**

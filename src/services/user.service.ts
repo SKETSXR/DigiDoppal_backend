@@ -1,7 +1,7 @@
-import { UserModel } from '../models/user.model';
-import { hashPassword } from '../utils/password.util';
-import { CustomError } from '../types/index';
-import { User } from '../db/schema';
+import { UserModel } from '../models/user.model.js';
+import { hashPassword } from '../utils/password.util.js';
+import { CustomError } from '../types/index.js';
+// import { User } from '../db/schema';
 
 export class UserService {
 

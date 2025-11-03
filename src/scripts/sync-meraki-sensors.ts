@@ -1,7 +1,7 @@
 
 import axios from 'axios';
-import { SensorService } from '../services/sensor.service';
-import { testConnection, closeConnection } from '../db/index';
+import { SensorService } from '../services/sensor.service.js';
+import { testConnection, closeConnection } from '../db/index.js';
 
 const MERAKI_API_KEY = process.env.MERAKI_API_KEY || 'b37d0a725ea9ad73663d44570c6ee238c1287630';
 const NETWORK_ID = process.env.MERAKI_NETWORK_ID || 'L_833165931063547167';

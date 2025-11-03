@@ -1,6 +1,6 @@
-import { ActivityLogModel } from '../models/activity-log.model';
-import { NewActivityLog } from '../db/schema';
-import { ActivityLogFilters } from '../types/index';
+import { ActivityLogModel } from '../models/activity-log.model.js';
+import { NewActivityLog } from '../db/schema.js';
+import { ActivityLogFilters } from '../types/index.js';
 
 export class ActivityLogService {
   

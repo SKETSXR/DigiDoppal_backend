@@ -1,6 +1,6 @@
 
-import { db } from '../db/index';
-import { sensors, temperature, humidity, prediction } from '../db/schema';
+import { db } from '../db/index.js';
+import { sensors, temperature, humidity, prediction } from '../db/schema.js';
 import { eq, and, gte, lte, desc, asc } from 'drizzle-orm';
 
 export class SensorDashboardModel {

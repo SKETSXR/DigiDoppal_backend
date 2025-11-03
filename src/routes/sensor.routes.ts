@@ -1,7 +1,7 @@
 
 import { FastifyInstance } from 'fastify';
-import { SensorController } from '../controllers/sensor.controller';
-import { verifyToken } from '../middleware/auth.middleware';
+import { SensorController } from '../controllers/sensor.controller.js';
+// import { verifyToken } from '../middleware/auth.middleware';
 
 export async function sensorRoutes(fastify: FastifyInstance) {
   // Sync sensors from Meraki API

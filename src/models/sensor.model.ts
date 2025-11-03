@@ -1,7 +1,7 @@
 
 import { eq } from 'drizzle-orm';
-import { db } from '../db/index';
-import { sensors, temperature, humidity, NewSensor, NewTemperature, NewHumidity } from '../db/schema';
+import { db } from '../db/index.js';
+import { sensors, temperature, humidity, NewSensor, NewTemperature, NewHumidity } from '../db/schema.js';
 
 export class SensorModel {
   /**

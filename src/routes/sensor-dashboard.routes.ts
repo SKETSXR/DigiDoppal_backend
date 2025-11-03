@@ -1,7 +1,7 @@
 
 import { FastifyInstance } from 'fastify';
-import { SensorDashboardController } from '../controllers/sensor-dashboard.controller';
-import { verifyToken } from '../middleware/auth.middleware';
+import { SensorDashboardController } from '../controllers/sensor-dashboard.controller.js';
+// import { verifyToken } from '../middleware/auth.middleware';
 
 export async function sensorDashboardRoutes(fastify: FastifyInstance) {
   // Get current readings

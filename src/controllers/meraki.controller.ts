@@ -1,9 +1,9 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { MerakiSyncJob } from '../jobs/meraki-sync.job';
-import { MerakiSyncService } from '../services/meraki-sync.service';
-import { successResponse, errorResponse } from '../utils/response.util';
-import { config } from '../config/env';
+import { MerakiSyncJob } from '../jobs/meraki-sync.job.js';
+import { MerakiSyncService } from '../services/meraki-sync.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
+import { config } from '../config/env.js';
 
 export class MerakiController {
   /**

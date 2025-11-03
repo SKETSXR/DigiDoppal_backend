@@ -1,6 +1,6 @@
 
-import { db } from '../db/index';
-import { activityLog } from '../db/schema';
+import { db } from '../db/index.js';
+import { activityLog } from '../db/schema.js';
 import { sql, gte, desc } from 'drizzle-orm';
 import { IntruderData } from '../types';
 

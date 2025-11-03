@@ -1,5 +1,5 @@
 import { FastifyRequest } from 'fastify';
-import { Coordinates } from '../db/schema';
+import { Coordinates } from '../db/schema.js';
 
 export interface JWTPayload {
   id: number;

@@ -1,6 +1,6 @@
 
-import { SensorModel, TemperatureModel, HumidityModel } from '../models/sensor.model';
-import { MerakiSensorResponse, SensorReading } from '../types/index';
+import { SensorModel, TemperatureModel, HumidityModel } from '../models/sensor.model.js';
+import { MerakiSensorResponse, SensorReading } from '../types/index.js';
 
 export class SensorService {
   /**

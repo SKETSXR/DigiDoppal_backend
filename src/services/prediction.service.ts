@@ -1,6 +1,6 @@
-import { PredictionModel } from '../models/prediction.model';
-import { NewPrediction } from '../db/schema';
-import { CustomError } from '../types/index';
+import { PredictionModel } from '../models/prediction.model.js';
+import { NewPrediction } from '../db/schema.js';
+import { CustomError } from '../types/index.js';
 
 export class PredictionService {
   /**

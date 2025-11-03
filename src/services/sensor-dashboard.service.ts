@@ -1,5 +1,5 @@
 
-import { SensorDashboardModel } from '../models/sensor-dashboard.model';
+import { SensorDashboardModel } from '../models/sensor-dashboard.model.js';
 
 export class SensorDashboardService {
   /**

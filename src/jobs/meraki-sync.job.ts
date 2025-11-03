@@ -1,6 +1,6 @@
 
-import { MerakiSyncService } from '../services/meraki-sync.service';
-import { config } from '../config/env';
+import { MerakiSyncService } from '../services/meraki-sync.service.js';
+import { config } from '../config/env.js';
 
 export class MerakiSyncJob {
   private static intervalId: NodeJS.Timeout | null = null;

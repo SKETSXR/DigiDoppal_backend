@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { verifyToken } from '../middleware/auth.middleware';
-import { ActivityLogController } from '../controllers/activity-log.controller';
+// import { verifyToken } from '../middleware/auth.middleware';
+import { ActivityLogController } from '../controllers/activity-log.controller.js';
 
 export async function activityLogRoutes(fastify: FastifyInstance) {
   // Create activity log (protected)

@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
-import { verifyToken } from '../middleware/auth.middleware';
-import { PredictionController } from '../controllers/prediction.controller';
+// import { verifyToken } from '../middleware/auth.middleware';
+import { PredictionController } from '../controllers/prediction.controller.js';
 
 export async function predictionRoutes(fastify: FastifyInstance) {
   // Get prediction by datetime (protected)

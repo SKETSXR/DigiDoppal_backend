@@ -1,8 +1,8 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { SensorService } from '../services/sensor.service';
-import { successResponse, errorResponse } from '../utils/response.util';
-import { MerakiSensorResponse, SensorReading } from '../types/index';
+import { SensorService } from '../services/sensor.service.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
+import { MerakiSensorResponse, SensorReading } from '../types/index.js';
 
 export class SensorController {
   /**

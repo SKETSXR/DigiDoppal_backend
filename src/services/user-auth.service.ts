@@ -1,7 +1,7 @@
 
-import { UserAuthModel } from '../models/user-auth.model';
-import { NewUserAuth } from '../db/schema';
-import { CustomError } from '../types/index';
+import { UserAuthModel } from '../models/user-auth.model.js';
+import { NewUserAuth } from '../db/schema.js';
+import { CustomError } from '../types/index.js';
 import crypto from 'crypto';
 
 export class UserAuthService {

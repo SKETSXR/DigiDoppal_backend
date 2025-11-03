@@ -1,10 +1,10 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { AuthService } from '../services/auth.service';
-import { UserAuthService } from '../services/user-auth.service';
-import { UserModel } from '../models/user.model';
-import { successResponse, errorResponse } from '../utils/response.util';
-import { AuthenticatedRequest } from '../types/index';
+import { AuthService } from '../services/auth.service.js';
+import { UserAuthService } from '../services/user-auth.service.js';
+import { UserModel } from '../models/user.model.js';
+import { successResponse, errorResponse } from '../utils/response.util.js';
+import { AuthenticatedRequest } from '../types/index.js';
 
 interface LoginBody {
   name: string;

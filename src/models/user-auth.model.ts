@@ -1,7 +1,7 @@
 
 import { eq, and, desc } from 'drizzle-orm';
-import { db } from '../db/index';
-import { userAuth, user, NewUserAuth } from '../db/schema';
+import { db } from '../db/index.js';
+import { userAuth, user, NewUserAuth } from '../db/schema.js';
 
 export class UserAuthModel {
   /**

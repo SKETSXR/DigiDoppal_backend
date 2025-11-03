@@ -1,22 +1,22 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
-import { config } from './config/env';
-import { testConnection, closeConnection } from './db/index';
-import { errorHandler } from './middleware/error.middleware';
+import { config } from './config/env.js';
+import { testConnection, closeConnection } from './db/index.js';
+import { errorHandler } from './middleware/error.middleware.js';
 
 // Import routes
-import { authRoutes } from './routes/auth.routes';
-import { userRoutes } from './routes/user.routes';
-import { activityLogRoutes } from './routes/activity-log.routes';
-import { predictionRoutes } from './routes/prediction.routes';
+import { authRoutes } from './routes/auth.routes.js';
+import { userRoutes } from './routes/user.routes.js';
+import { activityLogRoutes } from './routes/activity-log.routes.js';
+import { predictionRoutes } from './routes/prediction.routes.js';
 import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifySwagger from '@fastify/swagger';
-import { roomLiveRoutes } from './routes/room-live.routes';
-import { sensorRoutes } from './routes/sensor.routes';
-import { MerakiSyncJob } from './jobs/meraki-sync.job';
-import { merakiRoutes } from './routes/meraki.routes';
-import { sensorDashboardRoutes } from './routes/sensor-dashboard.routes';
+import { roomLiveRoutes } from './routes/room-live.routes.js';
+import { sensorRoutes } from './routes/sensor.routes.js';
+import { MerakiSyncJob } from './jobs/meraki-sync.job.js';
+import { merakiRoutes } from './routes/meraki.routes.js';
+import { sensorDashboardRoutes } from './routes/sensor-dashboard.routes.js';
 
 const app = Fastify({
   logger: {

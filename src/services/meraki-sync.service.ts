@@ -1,8 +1,8 @@
 
 import axios from 'axios';
-import { SensorService } from './sensor.service';
-import { config } from '../config/env';
-import { read } from 'fs';
+import { SensorService } from './sensor.service.js';
+import { config } from '../config/env.js';
+// import { read } from 'fs';
 
 export class MerakiSyncService {
   private static isRunning = false;
