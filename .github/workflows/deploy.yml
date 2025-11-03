@@ -39,15 +39,15 @@ jobs:
 
       - name: Deploy & Run Migrations on EC2
         uses: appleboy/ssh-action@v0.1.10
+        env:
+          ENV_DATABASE_URL: ${{ secrets.ENV_DATABASE_URL }}
+          ENV_PORT: ${{ secrets.ENV_PORT }}
+          ENV_JWT_SECRET: ${{ secrets.ENV_JWT_SECRET }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script_stop: true
-          env:
-            ENV_DATABASE_URL: ${{ secrets.ENV_DATABASE_URL }}
-            ENV_PORT: ${{ secrets.ENV_PORT }}
-            ENV_JWT_SECRET: ${{ secrets.ENV_JWT_SECRET }}
           script: |
             set -e
 
