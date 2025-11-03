@@ -1,8 +1,8 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { RoomLiveService } from '../services/room-live.service.js';
-import { successResponse, errorResponse } from '../utils/response.util.js';
-import { ActivityLogInput } from '../types/index.js';
+import { RoomLiveService } from '../services/room-live.service';
+import { successResponse, errorResponse } from '../utils/response.util';
+import { ActivityLogInput } from '../types/index';
 
 export class RoomLiveController {
   /**

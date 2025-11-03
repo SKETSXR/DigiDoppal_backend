@@ -37,7 +37,7 @@ nano .env
 Create a `.env` file in the root directory:
 
 ```env
-NODE_ENV=development
+MODE=development
 PORT=3000
 HOST=0.0.0.0
 
@@ -388,7 +388,7 @@ When you modify the database schema:
 2. **Build**: Run `pnpm build` before deployment
 3. **Database**: Run migrations on production database
 4. **JWT Secret**: Use strong, random secret in production
-5. **Logging**: Set `NODE_ENV=production` for performance
+5. **Logging**: Set `MODE=production` for performance
 6. **Connection Pooling**: Configure PostgreSQL connection limits
 
 ## 📊 Performance Considerations

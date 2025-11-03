@@ -14,6 +14,9 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import fastifySwagger from '@fastify/swagger';
 import { roomLiveRoutes } from './routes/room-live.routes';
 import { sensorRoutes } from './routes/sensor.routes';
+import { MerakiSyncJob } from './jobs/meraki-sync.job';
+import { merakiRoutes } from './routes/meraki.routes';
+import { sensorDashboardRoutes } from './routes/sensor-dashboard.routes';
 
 const app = Fastify({
   logger: {
@@ -81,12 +84,21 @@ async function registerRoutes() {
   await app.register(predictionRoutes, { prefix: '/api/predictions' });
   await app.register(roomLiveRoutes, { prefix: '/api/room-live' });
   await app.register(sensorRoutes, { prefix: '/api/sensors' });
+  await app.register(merakiRoutes, { prefix: '/api/meraki' });
+  await app.register(sensorDashboardRoutes, { prefix: '/api/sensor-dashboard' });
 }
 
 // Setup error handler
 function setupErrorHandler() {
   app.setErrorHandler(errorHandler);
 }
+
+async function startCronJobs() {
+  if (config.nodeEnv === 'production' || process.env.ENABLE_MERAKI_SYNC === 'true') {
+    MerakiSyncJob.start();
+  }
+}
+
 
 // Start server
 async function start() {
@@ -95,6 +107,7 @@ async function start() {
     await registerPlugins();
     await registerRoutes();
     setupErrorHandler();
+    await startCronJobs();
 
     // Start listening
     await app.listen({
@@ -113,6 +126,7 @@ async function start() {
 const gracefulShutdown = async () => {
   console.log('\n⏳ Shutting down gracefully...');
   try {
+    MerakiSyncJob.stop();
     await app.close();
     await closeConnection();
     console.log('Server closed successfully');

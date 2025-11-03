@@ -22,18 +22,21 @@ export class RoomLiveModel {
 
     // Extract unique user names from coordinates
     const uniqueUsers = new Set<string>();
+    let unknownUsers = 0;
     
     logs.forEach((log) => {
       if (log.coordinates && Array.isArray(log.coordinates)) {
         log.coordinates.forEach((coord: any) => {
           if (coord.name && coord.name !== 'unknown') {
             uniqueUsers.add(coord.name);
+          }else{
+            unknownUsers++;
           }
         });
       }
     });
 
-    return uniqueUsers.size;
+    return uniqueUsers.size + unknownUsers;
   }
 
   /**

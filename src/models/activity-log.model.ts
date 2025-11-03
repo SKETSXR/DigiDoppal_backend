@@ -1,7 +1,7 @@
 import { eq, and, gte, lte, desc } from 'drizzle-orm';
-import { db } from '../db/index.js';
-import { activityLog, user, camera, NewActivityLog } from '../db/schema.js';
-import { ActivityLogFilters } from '../types/index.js';
+import { db } from '../db/index';
+import { activityLog, user, camera, NewActivityLog } from '../db/schema';
+import { ActivityLogFilters } from '../types/index';
 
 export class ActivityLogModel {
 

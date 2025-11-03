@@ -51,7 +51,6 @@ export class SensorService {
 
           switch (data.metric) {
             case 'temperature':
-            case 'rawTemperature':
               if (data.temperature || data.rawTemperature) {
                 const tempData = data.temperature || data.rawTemperature!;
                 await TemperatureModel.create({
@@ -63,6 +62,7 @@ export class SensorService {
                 processed.temperature++;
               }
               break;
+            case 'rawTemperature':
 
             case 'humidity':
               if (data.humidity) {

@@ -16,6 +16,6 @@ export function errorHandler(
   reply.code(statusCode).send({
     success: false,
     message,
-    error: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+    error: process.env.MODE === 'development' ? error.stack : undefined,
   });
 }

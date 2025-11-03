@@ -15,7 +15,7 @@ export async function predictionRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: PredictionController.getPrediction,
   });
 
@@ -31,7 +31,7 @@ export async function predictionRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: PredictionController.getPredictions,
   });
 
@@ -50,7 +50,7 @@ export async function predictionRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: PredictionController.createPrediction,
   });
 }

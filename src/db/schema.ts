@@ -141,6 +141,7 @@ export const sensors = pgTable('sensors', {
   serialNumber: text('serial_number').notNull().unique(),
   name:text('name').notNull(),
   alertProfile: text('alert_profile'),
+  is_active: boolean("is_active").default(false),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });

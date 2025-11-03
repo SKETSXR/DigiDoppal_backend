@@ -10,7 +10,7 @@ export async function sensorRoutes(fastify: FastifyInstance) {
       tags: ['Sensors'],
       summary: 'Sync sensors from Meraki',
       description: 'Manually sync sensors from Meraki API response',
-      security: [{ bearerAuth: [] }],
+      // security: [{ bearerAuth: [] }],
       body: {
         type: 'object',
         properties: {
@@ -46,7 +46,7 @@ export async function sensorRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: SensorController.syncSensors,
   });
 
@@ -126,7 +126,7 @@ export async function sensorRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: SensorController.getAllSensors,
   });
 }

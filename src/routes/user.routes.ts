@@ -21,7 +21,7 @@ export async function userRoutes(fastify: FastifyInstance) {
 
   // Get all users (protected)
   fastify.get('/', {
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: UserController.getAllUsers,
   });
 
@@ -36,7 +36,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: UserController.getUser,
   });
 
@@ -60,7 +60,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: UserController.updateUser,
   });
 
@@ -75,7 +75,7 @@ export async function userRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken, isAdmin],
+    // preHandler: [verifyToken, isAdmin],
     handler: UserController.deleteUser,
   });
 }

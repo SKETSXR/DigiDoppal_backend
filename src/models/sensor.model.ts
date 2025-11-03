@@ -8,6 +8,10 @@ export class SensorModel {
    * Create or update sensor
    */
   static async upsert(sensorData: NewSensor) {
+    // console.log("working")
+    // console.log(await db
+    //   .select()
+    //   .from(sensors).limit(1))
     const existing = await db
       .select()
       .from(sensors)

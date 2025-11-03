@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { config } from '../config/env.js';
+import { config } from '../config/env';
 
 export async function hashPassword(password: string): Promise<string> {
   try {

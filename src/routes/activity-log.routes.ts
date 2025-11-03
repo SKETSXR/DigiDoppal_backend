@@ -23,7 +23,7 @@ export async function activityLogRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: ActivityLogController.createLog,
   });
 
@@ -43,7 +43,7 @@ export async function activityLogRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    preHandler: [verifyToken],
+    // preHandler: [verifyToken],
     handler: ActivityLogController.getLogs,
   });
 }
