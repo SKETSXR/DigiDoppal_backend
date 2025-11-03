@@ -60,6 +60,7 @@ jobs:
             done
 
             echo ".env file created."
+            cat .env
 
             echo "📦 Installing dependencies..."
             export CI=true
