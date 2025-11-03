@@ -10,24 +10,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # 3️⃣ Setup PNPM
       - name: Setup PNPM
         uses: pnpm/action-setup@v2
         with:
           version: 9
 
+      # 4️⃣ Install dependencies and build locally (optional)
       - name: Install dependencies and build
         run: |
           pnpm install --frozen-lockfile
           pnpm run build
 
+      # 5️⃣ Copy files to EC2
       - name: Copy files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -37,12 +42,9 @@ jobs:
           source: "."
           target: "/home/ubuntu/DigiDoppal_backend"
 
+      # 6️⃣ Deploy, create .env, run migrations, restart PM2
       - name: Deploy & Run Migrations on EC2
         uses: appleboy/ssh-action@v0.1.10
-        env:
-          ENV_DATABASE_URL: ${{ secrets.ENV_DATABASE_URL }}
-          ENV_PORT: ${{ secrets.ENV_PORT }}
-          ENV_JWT_SECRET: ${{ secrets.ENV_JWT_SECRET }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
@@ -50,21 +52,23 @@ jobs:
           script_stop: true
           script: |
             set -e
-
             cd /home/ubuntu/DigiDoppal_backend
 
             echo "🛠 Creating .env file from GitHub secrets..."
-            echo "" > .env
+            cat > .env <<EOF
+              DATABASE_URL=${{ secrets.ENV_DATABASE_URL }}
+              HOST=${{ENV_HOST}}
+              PORT=${{ secrets.ENV_PORT }}
+              JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}
+              BCRYPT_SALT_ROUNDS=${{ secrets.ENV_BCRYPT_SALT_ROUNDS }}
+              JWT_EXPIRES_IN=${{ secrets.ENV_JWT_EXPIRES_IN }}
+              MERAKI_API_KEY=${{ secrets.ENV_MERAKI_API_KEY }}
+              MERAKI_ORGANIZATION_ID=${{ secrets.ENV_MERAKI_ORGANIZATION_ID }}
+              MERAKI_SENSOR_SERIALS=${{ secrets.ENV_MERAKI_SENSOR_SERIALS }}
+              MERAKI_SYNC_INTERVAL=${{ secrets.ENV_MERAKI_SYNC_INTERVAL }}
+            EOF
 
-            # Write all ENV_ secrets dynamically (passed automatically by GitHub)
-            printenv | grep '^ENV_' | while read -r line; do
-              key=$(echo "$line" | sed 's/^ENV_//')
-              value=$(echo "$line" | cut -d'=' -f2-)
-              echo "${key}=${value}" >> .env
-            done
-
-            echo ".env file created."
-            cat .env
+            echo "✅ .env file created."
 
             echo "📦 Installing dependencies..."
             export CI=true
