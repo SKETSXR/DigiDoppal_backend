@@ -57,7 +57,6 @@ jobs:
             echo "🛠 Creating .env file from GitHub secrets..."
             cat > .env <<EOF
               DATABASE_URL=${{ secrets.ENV_DATABASE_URL }}
-              HOST=${{ENV_HOST}}
               PORT=${{ secrets.ENV_PORT }}
               JWT_SECRET=${{ secrets.ENV_JWT_SECRET }}
               BCRYPT_SALT_ROUNDS=${{ secrets.ENV_BCRYPT_SALT_ROUNDS }}
