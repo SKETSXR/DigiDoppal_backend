@@ -62,11 +62,10 @@ jobs:
               BCRYPT_SALT_ROUNDS=${{ secrets.ENV_BCRYPT_SALT_ROUNDS }}
               JWT_EXPIRES_IN=${{ secrets.ENV_JWT_EXPIRES_IN }}
               MERAKI_API_KEY=${{ secrets.ENV_MERAKI_API_KEY }}
-              ENABLE_MERAKI_SYNC=${{ENV_ENABLE_MERAKI_SYNC}}
-              MERAKI_SYNC_INTERVAL=${{ENV_MERAKI_SYNC_INTERVAL}}
-              MODE=${{ENV_MODE}}
-              PORT=${{ENV_PORT}}
-              HOST=${{ENV_HOST}}
+              ENABLE_MERAKI_SYNC=${{ secrets.ENV_ENABLE_MERAKI_SYNC}}
+              MERAKI_SYNC_INTERVAL=${{ secrets.ENV_MERAKI_SYNC_INTERVAL}}
+              MODE=${{ secrets.ENV_MODE}}
+              HOST=${{ secrets.ENV_HOST}}
               MERAKI_ORGANIZATION_ID=${{ secrets.ENV_MERAKI_ORGANIZATION_ID }}
               MERAKI_SENSOR_SERIALS=${{ secrets.ENV_MERAKI_SENSOR_SERIALS }}
               MERAKI_SYNC_INTERVAL=${{ secrets.ENV_MERAKI_SYNC_INTERVAL }}
