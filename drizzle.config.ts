@@ -7,6 +7,7 @@ export default {
   schema: './src/db/schema.ts',
   out: './drizzle/migrations',
   dialect: 'postgresql',
+  // schemaName: 'public',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
