@@ -9,8 +9,19 @@ export async function roomLiveRoutes(fastify: FastifyInstance) {
     schema: {
       tags: ['Room Live'],
       summary: 'Get room live status',
-      description: 'Get total users (last 24h) and recent intruders',
-    //   security: [{ bearerAuth: [] }],
+      description: 'Get total users and recent intruders for specified time range (default: 5 minutes)',
+      security: [{ bearerAuth: [] }],
+      querystring: {
+        type: 'object',
+        properties: {
+          time: { 
+            type: 'string', 
+            description: 'Time range in minutes (e.g., 5, 10, 30)',
+            default: '5',
+            examples: ['5', '10', '30', '60']
+          },
+        },
+      },
       response: {
         200: {
           type: 'object',
@@ -20,20 +31,28 @@ export async function roomLiveRoutes(fastify: FastifyInstance) {
             data: {
               type: 'object',
               properties: {
-                'Total User': { type: 'integer' },
+                'Total User': { type: 'integer', description: 'Total unique users + unknowns in time range' },
                 Intruders: {
                   type: 'array',
                   items: {
                     type: 'object',
                     properties: {
-                      image: { type: 'string' },
-                      datetime: { type: 'string' },
+                      image: { type: 'string', nullable: true, description: 'File path or base64 image' },
+                      datetime: { type: 'string', nullable: true },
                       status: { type: 'string' },
                     },
                   },
                 },
+                timeRange: { type: 'string', description: 'Time range description' },
               },
             },
+          },
+        },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
           },
         },
       },

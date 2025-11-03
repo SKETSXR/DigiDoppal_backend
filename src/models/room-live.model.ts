@@ -1,16 +1,16 @@
 
 import { db } from '../db/index.js';
 import { activityLog } from '../db/schema.js';
-import { sql, gte, desc } from 'drizzle-orm';
+import { sql, gte, desc, between } from 'drizzle-orm';
 import { IntruderData } from '../types';
 
 export class RoomLiveModel {
   /**
    * Get unique users from last 24 hours based on coordinates
    */
-  static async getTotalUsersLast24Hours() {
-    const twentyFourHoursAgo = new Date();
-    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+  static async getTotalUsersByTime(timeInMinutes: number) {
+    const timeAgo = new Date();
+    timeAgo.setMinutes(timeAgo.getMinutes() - timeInMinutes);
 
     const logs = await db
       .select({
@@ -18,31 +18,34 @@ export class RoomLiveModel {
         createdAt: activityLog.createdAt,
       })
       .from(activityLog)
-      .where(gte(activityLog.createdAt, twentyFourHoursAgo));
+      .where(between(activityLog.createdAt, timeAgo, new Date()));
 
     // Extract unique user names from coordinates
     const uniqueUsers = new Set<string>();
-    let unknownUsers = 0;
+    let unknownCount = 0;
     
     logs.forEach((log) => {
       if (log.coordinates && Array.isArray(log.coordinates)) {
         log.coordinates.forEach((coord: any) => {
           if (coord.name && coord.name !== 'unknown') {
             uniqueUsers.add(coord.name);
-          }else{
-            unknownUsers++;
+          } else {
+            unknownCount++;
           }
         });
       }
     });
 
-    return uniqueUsers.size + unknownUsers;
+    return uniqueUsers.size + unknownCount;
   }
 
   /**
    * Get last 10 intruders (unknown or unverified)
    */
-  static async getRecentIntruders(limit: number = 10) {
+static async getRecentIntruders(limit: number = 10, timeInMinutes: number = 5) {
+    const timeAgo = new Date();
+    timeAgo.setMinutes(timeAgo.getMinutes() - timeInMinutes);
+
     const logs = await db
       .select({
         filePath: activityLog.filePath,
@@ -53,6 +56,7 @@ export class RoomLiveModel {
         createdAt: activityLog.createdAt,
       })
       .from(activityLog)
+      .where(between(activityLog.createdAt, timeAgo, new Date()))
       .orderBy(desc(activityLog.createdAt))
       .limit(50); // Get more to filter
 
@@ -69,8 +73,8 @@ export class RoomLiveModel {
 
         if (hasUnknown || log.status === 'unknown') {
           intruders.push({
-            image: log.filePath || null,
-            datetime: log.datetime || null,
+            image: log.filePath || log.data || null,
+            datetime: log.datetime || log.createdAt.toISOString(),
             status: log.status,
           });
         }

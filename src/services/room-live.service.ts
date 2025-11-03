@@ -7,13 +7,14 @@ export class RoomLiveService {
   /**
    * Get room live status
    */
-  static async getRoomLiveStatus() {
-    const totalUsers = await RoomLiveModel.getTotalUsersLast24Hours();
-    const intruders = await RoomLiveModel.getRecentIntruders(10);
+static async getRoomLiveStatus(timeInMinutes: number = 5) {
+    const totalUsers = await RoomLiveModel.getTotalUsersByTime(timeInMinutes);
+    const intruders = await RoomLiveModel.getRecentIntruders(10, timeInMinutes);
 
     return {
       'Total User': totalUsers,
       Intruders: intruders,
+      timeRange: `Last ${timeInMinutes} minutes`,
     };
   }
 
@@ -52,7 +53,7 @@ export class RoomLiveService {
   /**
    * Get intruder history
    */
-  static async getIntruderHistory(timeInterval: '10min' | '30min' = '10min') {
+  static async getIntruderHistory(timeInterval: '10' | '30' = '10') {
     return await RoomLiveModel.getIntruderHistory(timeInterval);
   }
 }

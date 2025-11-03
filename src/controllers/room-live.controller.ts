@@ -8,9 +8,19 @@ export class RoomLiveController {
   /**
    * Get room live status
    */
-  static async getRoomLiveStatus(request: FastifyRequest, reply: FastifyReply) {
+  static async getRoomLiveStatus(
+    request: FastifyRequest<{ Querystring: { time?: string } }>,
+    reply: FastifyReply
+  ) {
     try {
-      const data = await RoomLiveService.getRoomLiveStatus();
+      const { time = '5' } = request.query;
+      const timeInMinutes = parseInt(time, 10);
+
+      if (isNaN(timeInMinutes) || timeInMinutes <= 0) {
+        return errorResponse(reply, 'Invalid time parameter. Must be a positive number', 400);
+      }
+
+      const data = await RoomLiveService.getRoomLiveStatus(timeInMinutes);
 
       return successResponse(reply, data, 'Data fetched successful', 200);
     } catch (error: any) {
@@ -53,11 +63,11 @@ export class RoomLiveController {
    * Get intruder history
    */
   static async getIntruderHistory(
-    request: FastifyRequest<{ Querystring: { time?: '10min' | '30min' } }>,
+    request: FastifyRequest<{ Querystring: { time?: '10' | '30' } }>,
     reply: FastifyReply
   ) {
     try {
-      const { time = '10min' } = request.query;
+      const { time = '10' } = request.query;
 
     //   if (!['10min', '30min'].includes(time)) {
     //     return errorResponse(reply, 'Invalid time parameter. Use 10min or 30min', 400);
