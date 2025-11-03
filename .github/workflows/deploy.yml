@@ -39,50 +39,40 @@ jobs:
 
       - name: Deploy & Run Migrations on EC2
         uses: appleboy/ssh-action@v0.1.10
-        env:
-          $(for var in $(compgen -A variable | grep '^ENV_'); do echo "$var=${!var}"; done)
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true
           script: |
-            set -e  # exit on any error
+            set -e
 
             cd /home/ubuntu/DigiDoppal_backend
 
-            # Backup existing .env before rewriting
-            if [ -f ".env" ]; then
-              cp .env .env.bak
-            fi
-
-            # Recreate .env file dynamically from ENV_ GitHub secrets
+            echo "🛠 Creating .env file from GitHub secrets..."
             echo "" > .env
+
+            # Write all ENV_ secrets dynamically (passed automatically by GitHub)
             printenv | grep '^ENV_' | while read -r line; do
               key=$(echo "$line" | sed 's/^ENV_//')
               value=$(echo "$line" | cut -d'=' -f2-)
               echo "${key}=${value}" >> .env
             done
 
-            # Dependency install (production only)
+            echo ".env file created."
+
+            echo "Installing dependencies..."
             pnpm install --production=false
 
-            # Ensure build exists
-            if [ ! -d "dist" ]; then
-              pnpm run build
-            fi
-
-            # Apply Drizzle migrations
-            echo " Running database migrations..."
+            echo " Running Drizzle migrations..."
             pnpm run db:migrate
 
-            # Restart service with PM2 (zero downtime)
+            echo " Restarting app via PM2..."
             if pm2 list | grep -q DigiDoppal_backend; then
-              echo " Restarting existing app..."
               pm2 reload DigiDoppal_backend
             else
-              echo " Starting new app instance..."
               pm2 start "pnpm run start" --name DigiDoppal_backend --env production
             fi
 
             pm2 save
-            echo "Deployment completed successfully!"
+            echo " Deployment completed successfully!"
