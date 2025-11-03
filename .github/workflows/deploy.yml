@@ -61,13 +61,14 @@ jobs:
 
             echo ".env file created."
 
-            echo "Installing dependencies..."
-            pnpm install --production=false
+            echo "📦 Installing dependencies..."
+            export CI=true
+            pnpm install --frozen-lockfile --production=false
 
-            echo " Running Drizzle migrations..."
+            echo "🧱 Running Drizzle migrations..."
             pnpm run db:migrate
 
-            echo " Restarting app via PM2..."
+            echo "🚀 Restarting app via PM2..."
             if pm2 list | grep -q DigiDoppal_backend; then
               pm2 reload DigiDoppal_backend
             else
@@ -75,4 +76,4 @@ jobs:
             fi
 
             pm2 save
-            echo " Deployment completed successfully!"
+            echo "✅ Deployment completed successfully!"
