@@ -4,12 +4,14 @@ import { config } from '../config/env.js';
 import * as schema from './schema.js';
 
 // Create postgres connection
-const queryClient = postgres(config.database.url, {
-  types: {
-    timestamp: (val: string) => new Date(val + 'Z'),   // explicitly interpret as UTC
-    timestamptz: (val: string) => new Date(val),  
-  },
-});
+const queryClient = postgres(config.database.url
+//   , {
+//   types: {
+//     timestamp: (val: string) => new Date(val + 'Z'),   // explicitly interpret as UTC
+//     timestamptz: (val: string) => new Date(val),  
+//   },
+// }
+);
 
 
 // Create drizzle instance
