@@ -7,8 +7,8 @@ import { sql } from 'drizzle-orm';
 export const userRole = pgTable('user_role', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 50 }).notNull().unique(),
-  createdAt: timestamp('created_at').defaultNow(),
-  updatedAt: timestamp('updated_at').defaultNow(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Users Table
@@ -18,8 +18,8 @@ export const user = pgTable('user', {
   photo: text('photo'),
   password: text('password').notNull(),
   roleId: integer('role_id').references(() => userRole.id, { onDelete: 'set null' }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Profile Images Table
@@ -27,16 +27,16 @@ export const profileImages = pgTable('profile_images', {
   id: serial('id').primaryKey(),
   image: text('image').notNull(),
   userId: integer('user_id').references(() => user.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Rooms Table
 export const room = pgTable('room', {
   id: serial('id').primaryKey(),
   name: varchar('name', { length: 100 }).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Cameras Table
@@ -47,8 +47,8 @@ export const camera = pgTable('camera', {
   companyName: varchar('company_name', { length: 100 }),
   roomId: integer('room_id').references(() => room.id, { onDelete: 'set null' }),
   isOn: boolean('is_on').default(true).notNull(),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 export interface Coordinates {
@@ -78,8 +78,8 @@ export const activityLog = pgTable('activity_log', {
   userId: integer('user_id').references(() => user.id, { onDelete: 'set null' }),
   cameraId: integer('camera_id').references(() => camera.id, { onDelete: 'set null' }),
   roomId: integer('room_id').references(() => room.id, { onDelete: 'set null' }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 }, (table) => ({
   statusCheck: check('status_check', sql`${table.status} IN ('verified', 'no_face', 'unknown')`),
 }));
@@ -91,8 +91,8 @@ export const temperature = pgTable('temperature', {
   datetime:text('datetime'),
   temperature: text('temperature'),
   sensorId: integer('sensor_id').references(() => sensors.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Humidity Table
@@ -102,8 +102,8 @@ export const humidity = pgTable('humidity', {
   datetime:text('datetime'),
   humidity: text('humidity'),
   sensorId: integer('sensor_id').references(() => sensors.id, { onDelete: 'cascade' }),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Prediction Table
@@ -115,8 +115,8 @@ export const prediction = pgTable('prediction', {
   minTemperaturePrediction: doublePrecision('min_temperature_prediction'),
   maxHumidityPrediction: doublePrecision('max_humidity_prediction'),
   minHumidityPrediction: doublePrecision('min_humidity_prediction'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 export const userAuth = pgTable('user_auth', {
@@ -129,10 +129,10 @@ export const userAuth = pgTable('user_auth', {
   deviceInfo: text('device_info'),
   location: varchar('location', { length: 255 }),
   isActive: boolean('is_active').default(true).notNull(),
-  expiresAt: timestamp('expires_at').notNull(),
-  lastUsedAt: timestamp('last_used_at'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Humidity Table
@@ -142,8 +142,8 @@ export const sensors = pgTable('sensors', {
   name:text('name').notNull(),
   alertProfile: text('alert_profile'),
   is_active: boolean("is_active").default(false),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  createdAt:  timestamp('created_at', { withTimezone: true }).default(sql`now()`),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).default(sql`now()`),
 });
 
 // Relations

@@ -1,14 +1,19 @@
 import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import postgres, { PostgresType } from 'postgres';
 import { config } from '../config/env.js';
 import * as schema from './schema.js';
 
 // Create postgres connection
-const queryClient = postgres(config.database.url);
+const queryClient = postgres(config.database.url, {
+  types: {
+    timestamp: (val: string) => new Date(val + 'Z'),   // explicitly interpret as UTC
+    timestamptz: (val: string) => new Date(val),  
+  },
+});
+
 
 // Create drizzle instance
 export const db = drizzle(queryClient, { schema });
-
 // Test connection
 export async function testConnection() {
   try {

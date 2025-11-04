@@ -1,7 +1,7 @@
 
 import { db } from '../db/index.js';
 import { activityLog } from '../db/schema.js';
-import { sql, gte, desc, between } from 'drizzle-orm';
+import { sql, gte, desc, between, lte, and } from 'drizzle-orm';
 import { IntruderData } from '../types';
 
 export class RoomLiveModel {
@@ -9,8 +9,8 @@ export class RoomLiveModel {
    * Get unique users from last 24 hours based on coordinates
    */
   static async getTotalUsersByTime(timeInMinutes: number) {
-    const timeAgo = new Date();
-    timeAgo.setMinutes(timeAgo.getMinutes() - timeInMinutes);
+    const now = new Date(); // UTC
+    const timeAgo = new Date(now.getTime() - timeInMinutes * 60 * 1000);
 
     const logs = await db
       .select({
@@ -18,7 +18,11 @@ export class RoomLiveModel {
         createdAt: activityLog.createdAt,
       })
       .from(activityLog)
-      .where(between(activityLog.createdAt, timeAgo, new Date()));
+      .where(and(
+            gte(activityLog.createdAt, new Date(timeAgo.toISOString())),
+            lte(activityLog.createdAt, new Date(now.toISOString()))
+          )
+      );
 
     // Extract unique user names from coordinates
     const uniqueUsers = new Set<string>();
@@ -43,8 +47,8 @@ export class RoomLiveModel {
    * Get last 10 intruders (unknown or unverified)
    */
 static async getRecentIntruders(limit: number = 10, timeInMinutes: number = 5) {
-    const timeAgo = new Date();
-    timeAgo.setMinutes(timeAgo.getMinutes() - timeInMinutes);
+    const now = new Date(); // UTC
+    const timeAgo = new Date(now.getTime() - timeInMinutes * 60 * 1000);
 
     const logs = await db
       .select({
@@ -56,7 +60,7 @@ static async getRecentIntruders(limit: number = 10, timeInMinutes: number = 5) {
         createdAt: activityLog.createdAt,
       })
       .from(activityLog)
-      .where(between(activityLog.createdAt, timeAgo, new Date()))
+      .where(between(activityLog.createdAt, timeAgo, now))
       .orderBy(desc(activityLog.createdAt))
       .limit(50); // Get more to filter
 
@@ -74,7 +78,7 @@ static async getRecentIntruders(limit: number = 10, timeInMinutes: number = 5) {
         if (hasUnknown || log.status === 'unknown') {
           intruders.push({
             image: log.filePath || log.data || null,
-            datetime: log.datetime || log.createdAt.toISOString(),
+            datetime: log.datetime || log?.createdAt?.toString() || "",
             status: log.status,
           });
         }
@@ -105,7 +109,7 @@ static async getRecentIntruders(limit: number = 10, timeInMinutes: number = 5) {
     const intervals: Map<string, { total: Set<string>; intruders: number }> = new Map();
 
     logs.forEach((log) => {
-      const logTime = new Date(log.createdAt);
+      const logTime = new Date(log.createdAt || "");
       const intervalKey = this.getIntervalKey(logTime, parseFloat(timeInterval));
 
       if (!intervals.has(intervalKey)) {
