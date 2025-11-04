@@ -16,6 +16,7 @@ export class RoomLiveModel {
       .select({
         coordinates: activityLog.coordinates,
         createdAt: activityLog.createdAt,
+        status: activityLog.status
       })
       .from(activityLog)
       .where(and(
@@ -28,19 +29,24 @@ export class RoomLiveModel {
     const uniqueUsers = new Set<string>();
     let unknownCount = 0;
     
-    logs.forEach((log) => {
+    logs.forEach((log: any) => {
       if (log.coordinates && Array.isArray(log.coordinates)) {
-        log.coordinates.forEach((coord: any) => {
-          if (coord.name && coord.name !== 'unknown') {
-            uniqueUsers.add(coord.name);
-          } else {
-            unknownCount++;
-          }
-        });
+        const hasUnknown = log.coordinates.some(
+          (coord: any) => coord.name === 'unknown' || !coord.name
+        );
+        if (log.name && log.name !== 'unknown') {
+          uniqueUsers.add(log.name);
+        }
+        else if (hasUnknown || log.status === 'unknown') {
+          unknownCount++;
+        }
       }
     });
 
-    return uniqueUsers.size + unknownCount;
+    return {
+      total_user : uniqueUsers.size + unknownCount,
+      Intruders: unknownCount
+    };
   }
 
   /**

@@ -32,7 +32,8 @@ export async function roomLiveRoutes(fastify: FastifyInstance) {
               type: 'object',
               properties: {
                 'Total User': { type: 'integer', description: 'Total unique users + unknowns in time range' },
-                Intruders: {
+                'Toal Intruders': { type: 'integer', description: 'Total unknowns user in time range' },
+                Intruder: {
                   type: 'array',
                   items: {
                     type: 'object',

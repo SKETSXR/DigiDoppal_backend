@@ -8,12 +8,13 @@ export class RoomLiveService {
    * Get room live status
    */
 static async getRoomLiveStatus(timeInMinutes: number = 5) {
-    const totalUsers = await RoomLiveModel.getTotalUsersByTime(timeInMinutes);
+    const {total_user,Intruders } = await RoomLiveModel.getTotalUsersByTime(timeInMinutes);
     const intruders = await RoomLiveModel.getRecentIntruders(10, timeInMinutes);
 
     return {
-      'Total User': totalUsers,
-      Intruders: intruders,
+      'Total User': total_user,
+      'Toal Intruders': Intruders,
+      Intruder: intruders,
       timeRange: `Last ${timeInMinutes} minutes`,
     };
   }

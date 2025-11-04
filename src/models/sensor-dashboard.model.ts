@@ -138,7 +138,7 @@ static async getTemperatureRecords(fromDate: Date, toDate: Date) {
       })
       .from(temperature)
       .where(and(gte(temperature.createdAt, fromDate), lte(temperature.createdAt, now)))
-      .orderBy(asc(temperature.createdAt));
+      .orderBy(asc(temperature.id));
 
     // Get prediction records for the entire date range
     const predictedRecords = await db
@@ -150,7 +150,7 @@ static async getTemperatureRecords(fromDate: Date, toDate: Date) {
       })
       .from(prediction)
       .where(and(gte(prediction.datetime, fromDate), lte(prediction.datetime, toDate)))
-      .orderBy(asc(prediction.datetime));
+      .orderBy(asc(prediction.id));
 
     return {
       actual: actualRecords,
