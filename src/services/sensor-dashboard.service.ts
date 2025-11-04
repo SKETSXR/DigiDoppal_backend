@@ -51,69 +51,17 @@ export class SensorDashboardService {
     // Normalize to full-day range
     const dayStart = fromDate
       ? new Date(fromDate)
-      : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+      : new Date(now.getTime() - 24* 60 * 60 * 1000)
     const dayEnd = toDate
       ? new Date(toDate)
-      : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+      : new Date();
 
     const records = await SensorDashboardModel.getTemperatureRecords(dayStart, dayEnd);
 
-    // Helper to find nearest record if no data exists for a given hour
-    const findNearest = (records: any[], target: Date, field: string) => {
-      if (!records.length) return null;
-
-      let nearest = records[0];
-      let minDiff = Math.abs(target.getTime() - new Date(nearest.datetime || nearest.createdAt).getTime());
-
-      for (const r of records) {
-        const diff = Math.abs(target.getTime() - new Date(r.datetime || r.createdAt).getTime());
-        if (diff < minDiff) {
-          minDiff = diff;
-          nearest = r;
-        }
-      }
-
-      return nearest[field] ?? null;
-    };
-
     // Aggregate by hour; fill gaps with nearest record
-    const aggregateToHourly = (records: any[], field: string) => {
-      const data: { datetime: Date; temperature: number | null }[] = [];
-
-      for (let hour = 0; hour < 24; hour++) {
-        const hourStart = new Date(dayStart);
-        hourStart.setHours(hour, 0, 0, 0);
-        const hourEnd = new Date(dayStart);
-        hourEnd.setHours(hour, 59, 59, 999);
-
-        // Get all records within this hour
-        const hourRecords = records.filter((r) => {
-          const t = new Date(r.datetime || r.createdAt);
-          return t >= hourStart && t <= hourEnd;
-        });
-
-        let temp: number | null = null;
-
-        if (hourRecords.length) {
-          // Average temperature for this hour
-          const total = hourRecords.reduce((sum, r) => sum + (r[field] || 0), 0);
-          temp = total / hourRecords.length;
-        } else {
-          // Find nearest available record
-          temp = findNearest(records, hourStart, field);
-        }
-
-        data.push({
-          datetime: hourStart,
-          temperature: temp,
-        });
-      }
-
-      return data;
-    };
-
-    const actualData = aggregateToHourly(records.actual, "temperature");
-    const predictedData = aggregateToHourly(records.predicted, "temperaturePrediction");
+    
+    const actualData = records.actual
+    const predictedData = records.predicted
 
     return {
       actual: actualData,
@@ -136,71 +84,17 @@ export class SensorDashboardService {
     // Normalize full-day time window (00:00 - 23:59)
     const dayStart = fromDate
       ? new Date(fromDate)
-      : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+      : new Date(now.getTime() - 24* 60 * 60 * 1000)
     const dayEnd = toDate
       ? new Date(toDate)
-      : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+      : new Date();
 
     // Fetch from DB model
     const records = await SensorDashboardModel.getHumidityRecords(dayStart, dayEnd);
 
-    // --- Helper: find nearest record for missing hour ---
-    const findNearest = (records: any[], target: Date, field: string) => {
-      if (!records.length) return null;
-
-      let nearest = records[0];
-      let minDiff = Math.abs(target.getTime() - new Date(nearest.datetime || nearest.createdAt).getTime());
-
-      for (const r of records) {
-        const diff = Math.abs(target.getTime() - new Date(r.datetime || r.createdAt).getTime());
-        if (diff < minDiff) {
-          minDiff = diff;
-          nearest = r;
-        }
-      }
-
-      return nearest[field] ?? null;
-    };
-
-    // --- Helper: aggregate data into hourly points ---
-    const aggregateToHourly = (records: any[], field: string) => {
-      const hourlyData: { datetime: Date; humidity: number | null }[] = [];
-
-      for (let hour = 0; hour < 24; hour++) {
-        const hourStart = new Date(dayStart);
-        hourStart.setHours(hour, 0, 0, 0);
-        const hourEnd = new Date(dayStart);
-        hourEnd.setHours(hour, 59, 59, 999);
-
-        const hourRecords = records.filter((r) => {
-          const t = new Date(r.datetime || r.createdAt);
-          return t >= hourStart && t <= hourEnd;
-        });
-
-        let humidity: number | null = null;
-
-        if (hourRecords.length > 0) {
-          // Average for that hour
-          const total = hourRecords.reduce((sum, r) => sum + (r[field] || 0), 0);
-          humidity = total / hourRecords.length;
-        } else {
-          // Fallback to nearest record
-          humidity = findNearest(records, hourStart, field);
-        }
-
-        hourlyData.push({
-          datetime: hourStart,
-          humidity,
-        });
-      }
-
-      return hourlyData;
-    };
-
-    // Apply logic for actual and predicted datasets
-    const actualData = aggregateToHourly(records.actual, "humidity");
-    const predictedData = aggregateToHourly(records.predicted, "humidityPrediction");
-
+    const actualData = records.actual
+    const predictedData = records.predicted
+    
     return {
       actual: actualData,
       predicted: predictedData,

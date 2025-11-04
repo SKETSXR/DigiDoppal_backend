@@ -50,50 +50,43 @@ export class SensorDashboardModel {
   /**
    * Get temperature records (actual + predicted)
    */
-  static async getTemperatureRecords(fromDate: Date, toDate: Date) {
+static async getTemperatureRecords(fromDate: Date, toDate: Date) {
     const now = new Date();
 
-    // Define actual and prediction ranges
-    const dayStart = new Date(now);
-    dayStart.setHours(0, 0, 0, 0);
+    // Default fromDate/toDate if not provided
+    const start = fromDate || new Date(0); // earliest possible date
+    const end = toDate || now;             // now UTC
 
-    const dayEnd = new Date(now);
-    dayEnd.setHours(23, 59, 59, 999);
-
-    // Actual record range
-    const actualFrom = fromDate || dayStart;
-    const actualTo = toDate && toDate < now ? toDate : now;
-
-    // Prediction record range
-    const predictionFrom = now;
-    const predictionTo = dayEnd;
+    console.log(start, fromDate, end, toDate)
 
     // Fetch actual temperature records
     const actualRecords = await db
       .select()
       .from(temperature)
-      .where(and(gte(temperature.createdAt, actualFrom), lte(temperature.createdAt, actualTo)))
-      .orderBy(asc(temperature.createdAt));
+      .where(and(gte(temperature.createdAt, start), lte(temperature.createdAt, end)))
+      .orderBy(asc(temperature.id));
 
-    // console.log("actual Reseult",db
-    //   .select()
-    //   .from(temperature)
-    //   .where(and(gte(temperature.createdAt, actualFrom), lte(temperature.createdAt, actualTo)))
-    //   .orderBy(asc(temperature.createdAt)).toSQL() );
+      console.log(db
+      .select()
+      .from(temperature)
+      .where(and(gte(temperature.createdAt, start), lte(temperature.createdAt, end)))
+      .orderBy(asc(temperature.createdAt)).toSQL())
 
-    // Fetch predicted records only if toDate is after now (or no toDate provided)
-    let predictedRecords: any[] = [];
-    if (!toDate || toDate > now) {
-      predictedRecords = await db
-        .select()
-        .from(prediction)
-        .where(and(gte(prediction.datetime, predictionFrom), lte(prediction.datetime, predictionTo)))
-        .orderBy(asc(prediction.datetime));
-    }
+    // Fetch predicted temperature records
+    const predictedRecords = await db
+      .select()
+      .from(prediction)
+      .where(and(gte(prediction.datetime, start), lte(prediction.datetime, end)))
+      .orderBy(asc(prediction.id));
 
     return {
       actual: actualRecords,
       predicted: predictedRecords,
+      prediction_found: predictedRecords.length > 0,
+      range: {
+        from: start.toISOString(),
+        to: end.toISOString(),
+      },
     };
   }
 
@@ -103,24 +96,16 @@ export class SensorDashboardModel {
   static async getHumidityRecords(fromDate: Date, toDate: Date) {
     const now = new Date();
 
-    // Define actual and prediction ranges
-    const dayStart = new Date(now);
-    dayStart.setHours(0, 0, 0, 0);
-
-    const dayEnd = new Date(now);
-    dayEnd.setHours(23, 59, 59, 999);
-
-    // Actual record range
-    const actualFrom = fromDate || dayStart;
-    const actualTo = toDate && toDate < now ? toDate : now;
-
+    // Default fromDate/toDate if not provided
+    const start = fromDate || new Date(0); // earliest possible date
+    const end = toDate || now;             // now UTC
 
     // Get actual humidity records up to current time
     const actualRecords = await db
       .select()
       .from(humidity)
-      .where(and(gte(humidity.createdAt, actualFrom), lte(humidity.createdAt, actualTo)))
-      .orderBy(asc(humidity.createdAt));
+      .where(and(gte(humidity.createdAt, start), lte(humidity.createdAt, end)))
+      .orderBy(asc(humidity.id));
 
     // If toDate is in the future, get predictions
     let predictedRecords: any[] = [];
@@ -128,7 +113,7 @@ export class SensorDashboardModel {
       predictedRecords = await db
         .select()
         .from(prediction)
-        .where(and(gte(prediction.datetime, now), lte(prediction.datetime, dayEnd)))
+        .where(and(gte(prediction.datetime, start), lte(prediction.datetime, end)))
         .orderBy(asc(prediction.datetime));
     }
 
